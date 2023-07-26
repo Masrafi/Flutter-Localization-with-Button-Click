@@ -29,6 +29,10 @@ class _SettingsPageState extends State<SettingsPage> {
     Locale _locale = await setLocale("fa");
     MyApp.setLocale(context, _locale);
   }
+  Future onPressed4() async {
+    Locale _locale = await setLocale("ja");
+    MyApp.setLocale(context, _locale);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,38 +41,38 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Column(
         children: [
-          Center(
-              child: DropdownButton<Language>(
-            iconSize: 30,
-            hint: Text(translation(context).changeLanguage),
-            onChanged: (Language? language) async {
-              if (language != null) {
-                Locale _locale = await setLocale(language.languageCode);
-                MyApp.setLocale(context, _locale);
-              }
-            },
-            items: Language.languageList()
-                .map<DropdownMenuItem<Language>>(
-                  (e) => DropdownMenuItem<Language>(
-                    value: e,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          e.flag,
-                          style: const TextStyle(fontSize: 30),
-                        ),
-                        Text(e.name)
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          )),
-          SizedBox(height: 100,),
+          // Center(
+          //     child: DropdownButton<Language>(
+          //   iconSize: 30,
+          //   hint: Text(translation(context).changeLanguage),
+          //   onChanged: (Language? language) async {
+          //     if (language != null) {
+          //       Locale _locale = await setLocale(language.languageCode);
+          //       MyApp.setLocale(context, _locale);
+          //     }
+          //   },
+          //   items: Language.languageList()
+          //       .map<DropdownMenuItem<Language>>(
+          //         (e) => DropdownMenuItem<Language>(
+          //           value: e,
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //             children: <Widget>[
+          //               Text(
+          //                 e.flag,
+          //                 style: const TextStyle(fontSize: 30),
+          //               ),
+          //               Text(e.name)
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //       .toList(),
+          // )),
+          const SizedBox(height: 100,),
           TextButton(
             onPressed: onPressed,
-            child:  Text("English"),
+            child:  const Text("English"),
           ),
           TextButton(
             onPressed: onPressed1,
@@ -81,6 +85,10 @@ class _SettingsPageState extends State<SettingsPage> {
           TextButton(
             onPressed: onPressed3,
             child: const Text("فارسی"),
+          ),
+          TextButton(
+            onPressed: onPressed4,
+            child: const Text("Japanese"),
           ),
 
         ],

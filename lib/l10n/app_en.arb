@@ -1,11 +1,13 @@
 {
   "homePage": "Home Page",
+  "secondScreen": "Second Page",
   "personalInformation": "Personal Information",
   "name": "Name",
   "nameHint": "Enter your name",
   "email": "Email",
   "emailHint": "Enter your email",
   "dateOfBirth": "Date of Birth",
+  "time": "Time",
   "requiredField": "Required Field",
   "submitInfo": "Submit Info",
   "aboutUs": "About Us",

@@ -1,11 +1,13 @@
 {
   "homePage": "الصفحة الرئيسية",
+  "secondScreen": "الصفحة الثانية",
   "personalInformation": "معلومات شخصية",
   "name": "اسم",
   "nameHint": "أدخل أسمك",
   "email": "البريد الإلكتروني",
   "emailHint": "أدخل بريدك الالكتروني",
   "dateOfBirth": "تاريخ الولادة",
+  "time": "وقت",
   "requiredField": "يتطلب حقلا",
   "submitInfo": "إرسال معلومات",
   "aboutUs": "معلومات عنا",

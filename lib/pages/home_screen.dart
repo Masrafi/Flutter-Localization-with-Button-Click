@@ -1,3 +1,4 @@
+import 'package:chnage_language_with_button/pages/second_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../classes/language.dart';
@@ -15,9 +16,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String? selectedTime;
+  // void _showSuccessDialog() {
+  //   showTimePicker(context: context, initialTime: TimeOfDay.now());
+  // }
 
-  void _showSuccessDialog() {
-    showTimePicker(context: context, initialTime: TimeOfDay.now());
+  Future<void> _showTimePicketDialog() async {
+    final TimeOfDay? time =
+    await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (time != null) {
+      setState(() {
+        selectedTime = time.format(context);
+      });
+    }
   }
 
   @override
@@ -70,7 +81,21 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
+  DateTime selectedDate = DateTime.now();
+TextEditingController nameCon = TextEditingController();
+TextEditingController emailCon = TextEditingController();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
   Form _mainForm(BuildContext context) {
     return Form(
       key: _key,
@@ -96,6 +121,7 @@ class _HomePageState extends State<HomePage> {
               }
               return null;
             },
+            controller: nameCon,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: translation(context).name,
@@ -112,6 +138,7 @@ class _HomePageState extends State<HomePage> {
               }
               return null;
             },
+            controller: emailCon,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: translation(context).email,
@@ -128,21 +155,29 @@ class _HomePageState extends State<HomePage> {
             ),
             onTap: () async {
               FocusScope.of(context).requestFocus(FocusNode());
-              await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(DateTime.now().year),
-                lastDate: DateTime(DateTime.now().year + 20),
-              );
+              _selectDate(context);
             },
           ),
           const SizedBox(
             height: 10,
           ),
+
+          TextFormField(
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              hintText: selectedTime ?? translation(context).time,
+            ),
+            onTap: () async {
+              _showTimePicketDialog();
+            },
+          ),
+          const SizedBox(
+            height: 50,
+          ),
           MaterialButton(
             onPressed: () {
               if (_key.currentState != null && _key.currentState!.validate()) {
-                _showSuccessDialog();
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>SecondScreen(name: nameCon.text, email: emailCon.text, date: selectedDate.toString().split(' ')[0], time: selectedTime,)));
               }
             },
             height: 50,

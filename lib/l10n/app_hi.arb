@@ -1,11 +1,13 @@
 {
   "homePage": "मुख पृष्ठ",
+  "secondScreen": "दूसरा पेज",
   "personalInformation": "व्यक्तिगत जानकारी",
   "name": "नाम",
   "nameHint": "अपना नाम दर्ज करें",
   "email": "ईमेल",
   "emailHint": "अपना ईमेल दर्ज करें",
   "dateOfBirth": "जन्म की तारीख",
+  "time": "समय",
   "requiredField": "आवश्यक क्षेत्र",
   "submitInfo": "जानकारी जमा करें",
   "aboutUs": "हमारे बारे में",
