@@ -1,11 +1,13 @@
+import 'package:chnage_language_with_button/localization/bloc/localization_bloc.dart';
+import 'package:chnage_language_with_button/localization/bloc/localization_event.dart';
+import 'package:chnage_language_with_button/localization/bloc/localization_state.dart';
+import 'package:chnage_language_with_button/localization/model/language.dart';
+import 'package:chnage_language_with_button/localization/classes/language_constants.dart';
 import 'package:chnage_language_with_button/pages/second_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../classes/language.dart';
-import '../classes/language_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../main.dart';
 import '../router/route_constants.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _showTimePicketDialog() async {
     final TimeOfDay? time =
-    await showTimePicker(context: context, initialTime: TimeOfDay.now());
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (time != null) {
       setState(() {
         selectedTime = time.format(context);
@@ -33,57 +35,70 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(translation(context).homePage),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<Language>(
-              underline: const SizedBox(),
-              icon: const Icon(
-                Icons.language,
-                color: Colors.white,
-              ),
-              onChanged: (Language? language) async {
-                if (language != null) {
-                  Locale _locale = await setLocale(language.languageCode);
-                  MyApp.setLocale(context, _locale);
-                }
-              },
-              items: Language.languageList()
-                  .map<DropdownMenuItem<Language>>(
-                    (e) => DropdownMenuItem<Language>(
-                      value: e,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Text(
-                            e.flag,
-                            style: const TextStyle(fontSize: 30),
+    return BlocProvider(
+      create: (context) => LocalizationBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(translation(context).homePage),
+          actions: <Widget>[
+            BlocBuilder<LocalizationBloc, LocalizationState>(
+                builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton<Language>(
+                  underline: const SizedBox(),
+                  icon: const Icon(
+                    Icons.language,
+                    color: Colors.black,
+                  ),
+                  onChanged: (Language? language) async {
+                    if (language != null) {
+                      debugPrint(language?.languageCode);
+                      debugPrint('.....UI');
+                      BlocProvider.of<LocalizationBloc>(context).add(
+                        LocalizationChange(
+                            tabIndex: language.languageCode, con: context),
+                      );
+                      // Locale _locale = await setLocale(language.languageCode);
+                      // Test().onButtonTapped(_locale);
+                    }
+                  },
+                  items: Language.languageList()
+                      .map<DropdownMenuItem<Language>>(
+                        (e) => DropdownMenuItem<Language>(
+                          value: e,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                e.flag,
+                                style: const TextStyle(fontSize: 30),
+                              ),
+                              Text(e.name)
+                            ],
                           ),
-                          Text(e.name)
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: _drawerList(),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: _mainForm(context),
+                        ),
+                      )
+                      .toList(),
+                ),
+              );
+            }),
+          ],
+        ),
+        drawer: Drawer(
+          child: _drawerList(),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: _mainForm(context),
+        ),
       ),
     );
   }
+
   DateTime selectedDate = DateTime.now();
-TextEditingController nameCon = TextEditingController();
-TextEditingController emailCon = TextEditingController();
+  TextEditingController nameCon = TextEditingController();
+  TextEditingController emailCon = TextEditingController();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -96,6 +111,7 @@ TextEditingController emailCon = TextEditingController();
       });
     }
   }
+
   Form _mainForm(BuildContext context) {
     return Form(
       key: _key,
@@ -161,7 +177,6 @@ TextEditingController emailCon = TextEditingController();
           const SizedBox(
             height: 10,
           ),
-
           TextFormField(
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
@@ -177,7 +192,15 @@ TextEditingController emailCon = TextEditingController();
           MaterialButton(
             onPressed: () {
               if (_key.currentState != null && _key.currentState!.validate()) {
-               Navigator.push(context, MaterialPageRoute(builder: (context)=>SecondScreen(name: nameCon.text, email: emailCon.text, date: selectedDate.toString().split(' ')[0], time: selectedTime,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SecondScreen(
+                              name: nameCon.text,
+                              email: emailCon.text,
+                              date: selectedDate.toString().split(' ')[0],
+                              time: selectedTime,
+                            )));
               }
             },
             height: 50,

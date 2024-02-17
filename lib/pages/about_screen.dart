@@ -1,6 +1,5 @@
+import 'package:chnage_language_with_button/localization/classes/language_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../classes/language_constants.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);

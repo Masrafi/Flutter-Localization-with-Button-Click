@@ -1,9 +1,10 @@
+import 'package:chnage_language_with_button/localization/bloc/localization_bloc.dart';
+import 'package:chnage_language_with_button/localization/bloc/localization_event.dart';
+import 'package:chnage_language_with_button/localization/bloc/localization_state.dart';
+import 'package:chnage_language_with_button/localization/classes/language_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../classes/language.dart';
-import '../classes/language_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../main.dart';
-
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -13,86 +14,45 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  Future onPressed() async {
-      Locale _locale = await setLocale("en");
-      MyApp.setLocale(context, _locale);
-  }
-  Future onPressed1() async {
-    Locale _locale = await setLocale("bn");
-    MyApp.setLocale(context, _locale);
-  }
-  Future onPressed2() async {
-    Locale _locale = await setLocale("ar");
-    MyApp.setLocale(context, _locale);
-  }
-  Future onPressed3() async {
-    Locale _locale = await setLocale("fa");
-    MyApp.setLocale(context, _locale);
-  }
-  Future onPressed4() async {
-    Locale _locale = await setLocale("ja");
-    MyApp.setLocale(context, _locale);
-  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(translation(context).settings),
-      ),
-      body: Column(
-        children: [
-          // Center(
-          //     child: DropdownButton<Language>(
-          //   iconSize: 30,
-          //   hint: Text(translation(context).changeLanguage),
-          //   onChanged: (Language? language) async {
-          //     if (language != null) {
-          //       Locale _locale = await setLocale(language.languageCode);
-          //       MyApp.setLocale(context, _locale);
-          //     }
-          //   },
-          //   items: Language.languageList()
-          //       .map<DropdownMenuItem<Language>>(
-          //         (e) => DropdownMenuItem<Language>(
-          //           value: e,
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //             children: <Widget>[
-          //               Text(
-          //                 e.flag,
-          //                 style: const TextStyle(fontSize: 30),
-          //               ),
-          //               Text(e.name)
-          //             ],
-          //           ),
-          //         ),
-          //       )
-          //       .toList(),
-          // )),
-          const SizedBox(height: 100,),
-          TextButton(
-            onPressed: onPressed,
-            child:  const Text("English"),
-          ),
-          TextButton(
-            onPressed: onPressed1,
-            child: const Text("Bengali"),
-          ),
-          TextButton(
-            onPressed: onPressed2,
-            child: const Text("Arabic"),
-          ),
-          TextButton(
-            onPressed: onPressed3,
-            child: const Text("فارسی"),
-          ),
-          TextButton(
-            onPressed: onPressed4,
-            child: const Text("Japanese"),
-          ),
-
-        ],
+    return BlocProvider(
+      create: (context) => LocalizationBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(translation(context).settings),
+        ),
+        body: BlocBuilder<LocalizationBloc, LocalizationState>(
+            builder: (context, state) {
+          return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: language.length,
+              itemBuilder: (_, index) {
+                return GestureDetector(
+                  onTap: () {
+                    BlocProvider.of<LocalizationBloc>(context).add(
+                      LocalizationChange(tabIndex: code[index], con: context),
+                    );
+                  },
+                  child: Text(language![index] ?? '',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      )),
+                );
+              });
+        }),
       ),
     );
   }
+
+  List<String> language = ['English', 'Bengali', 'Arabic', 'فارسی', 'Japanese'];
+  List<String> code = [
+    'en',
+    'bn',
+    'ar',
+    'fa',
+    'ja',
+  ];
 }

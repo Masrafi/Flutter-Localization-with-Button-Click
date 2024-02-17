@@ -1,7 +1,6 @@
+import 'package:chnage_language_with_button/localization/classes/language_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'classes/language_constants.dart';
 import 'router/custom_router.dart';
 import 'router/route_constants.dart';
 
@@ -52,4 +51,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
